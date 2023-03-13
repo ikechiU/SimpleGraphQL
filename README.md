@@ -171,7 +171,7 @@ It is an implementation based on the specification and the JavaScript reference 
 ## A sample Controller
       @Controller
       @RequiredArgsConstructor
-      public class AuthorController {
+      public class BookController {
       
           private final BookQueryServiceImpl bookQueryService;
           private final BookMutationServiceImpl bookMutationService;
