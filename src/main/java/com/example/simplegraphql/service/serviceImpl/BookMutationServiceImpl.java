@@ -5,6 +5,7 @@ import com.example.simplegraphql.entity.Author;
 import com.example.simplegraphql.entity.Book;
 import com.example.simplegraphql.repository.AuthorRepository;
 import com.example.simplegraphql.repository.BookRepository;
+import com.example.simplegraphql.service.BookMutationService;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
 
@@ -16,31 +17,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 @AllArgsConstructor
-public class Mutation implements GraphQLMutationResolver {
+public class BookMutationServiceImpl implements BookMutationService, GraphQLMutationResolver {
 
     private final AuthorRepository authorRepository;
     private final BookRepository bookRepository;
 
     /**
      * Every field in the schema root query should have a method in the Query Resolver class with same name
-     *    createAuthor(firstName: String!, lastName: String!, age: Int!): Author
-
      *    createBook(name: String!, pageCount: Int!, author: Int!): Book
      *    updateBook(bookId: Int!, name: String!, pageCount: Int!): Book
      *    deleteBook(bookId: ID!): Boolean
      */
 
-    public Author createAuthor(String firstName, String lastName, int age) {
-        Author author = Author.builder()
-                .firstName(firstName)
-                .lastName(lastName)
-                .age(age)
-                .build();
-
-        Author savedAuthor = authorRepository.save(author);
-        return savedAuthor;
-    }
-
+    @Override
     public Book createBook(String name, int pageCount, int authorId) {
         Author author = authorRepository.findByAuthorId(authorId).orElse(null);
         System.out.println("Author: " + author);
@@ -55,6 +44,7 @@ public class Mutation implements GraphQLMutationResolver {
         return savedBook;
     }
 
+    @Override
     public Book updateBook(int bookId, String name, int pageCount) {
         Book existingBook = bookRepository.findByBookId(bookId).orElseThrow(()-> new RuntimeException("Not found"));
         existingBook.setName(name);
@@ -65,6 +55,7 @@ public class Mutation implements GraphQLMutationResolver {
         return updatedBook;
     }
 
+    @Override
     public boolean deleteBook(int id) {
         bookRepository.findByBookId(id).orElseThrow(()-> new RuntimeException("Not found"));
         bookRepository.deleteById(id);

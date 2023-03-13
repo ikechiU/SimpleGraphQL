@@ -1,15 +1,12 @@
 package com.example.simplegraphql.controller;
 
 import com.example.simplegraphql.entity.Author;
-import com.example.simplegraphql.entity.Book;
-import com.example.simplegraphql.service.serviceImpl.BookResolver;
-import com.example.simplegraphql.service.serviceImpl.Mutation;
-import com.example.simplegraphql.service.serviceImpl.Query;
+import com.example.simplegraphql.service.serviceImpl.AuthorMutationServiceImpl;
+import com.example.simplegraphql.service.serviceImpl.AuthorQueryServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.graphql.data.method.annotation.Argument;
 import org.springframework.graphql.data.method.annotation.MutationMapping;
 import org.springframework.graphql.data.method.annotation.QueryMapping;
-import org.springframework.graphql.data.method.annotation.SchemaMapping;
 import org.springframework.stereotype.Controller;
 
 import java.util.ArrayList;
@@ -25,80 +22,33 @@ import java.util.List;
 @RequiredArgsConstructor
 public class AuthorController {
 
-    private final Query query;
-    private final Mutation mutation;
-    private final BookResolver bookResolver;
+    private final AuthorQueryServiceImpl authorQueryService;
+    private final AuthorMutationServiceImpl authorMutationService;
 
     @QueryMapping
     public List<Author> findAllAuthors() {
         List<Author> result = new ArrayList<>();
-        query.findAllAuthors().forEach(result::add);
+        authorQueryService.findAllAuthors().forEach(result::add);
         return result;
     }
 
     @QueryMapping
     public List<Author> findAllAuthorsPaged(@Argument int page, @Argument int limit) {
-        return query.findAllAuthorsPaged(page, limit);
+        return authorQueryService.findAllAuthorsPaged(page, limit);
     }
 
     @QueryMapping
     public int countAuthors() {
-        return query.countAuthors();
+        return authorQueryService.countAuthors();
     }
 
     @QueryMapping
     public Author findAuthorById(@Argument int authorId) {
-        return query.findAuthorById(authorId);
-    }
-
-    @QueryMapping
-    public List<Book> findAllBooks() {
-        List<Book> books = new ArrayList<>();
-        query.findAllBooks().forEach(books::add);
-        return books;
-    }
-
-    @QueryMapping
-    public List<Book> findAllBooksPaged(@Argument int page, @Argument int limit) {
-        return query.findAllBooksPaged(page, limit);
-    }
-
-    @QueryMapping
-    public int countBooks() {
-        return query.countBooks();
-    }
-
-    @QueryMapping
-    public Book findBookById(@Argument int bookId) {
-        return query.findBookById(bookId);
-    }
-
-    /**
-     * Maps the handler method to a field with the same name in the schema
-     */
-    @SchemaMapping
-    public Author author(Book book) {
-        return bookResolver.getAuthor(book);
+        return authorQueryService.findAuthorById(authorId);
     }
 
     @MutationMapping
     public Author createAuthor(@Argument String firstName, @Argument String lastName, @Argument int age) {
-        return mutation.createAuthor(firstName, lastName, age);
+        return authorMutationService.createAuthor(firstName, lastName, age);
     }
-
-    @MutationMapping
-    public Book createBook(@Argument String name, @Argument int pageCount, @Argument int authorId) {
-        return mutation.createBook(name, pageCount, authorId);
-    }
-
-    @MutationMapping
-    public Book updateBook(@Argument int bookId, @Argument String name, @Argument int pageCount) {
-        return mutation.updateBook(bookId, name, pageCount);
-    }
-
-    @MutationMapping
-    public boolean deleteBook(@Argument int bookId) {
-        return mutation.deleteBook(bookId);
-    }
-
 }

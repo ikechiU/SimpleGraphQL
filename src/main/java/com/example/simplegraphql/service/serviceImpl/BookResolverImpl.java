@@ -4,8 +4,10 @@ import com.coxautodev.graphql.tools.GraphQLResolver;
 import com.example.simplegraphql.entity.Author;
 import com.example.simplegraphql.entity.Book;
 import com.example.simplegraphql.repository.AuthorRepository;
+import com.example.simplegraphql.service.BookResolver;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 /**
  * @author Ikechi Ucheagwu
@@ -19,12 +21,14 @@ import org.springframework.stereotype.Component;
  * never do the work to retrieve it. So, the getAuthor() method will not be executed.
  */
 
-@Component
+@Service
 @AllArgsConstructor
-public class BookResolver implements GraphQLResolver<Book> {
+public class BookResolverImpl implements BookResolver, GraphQLResolver<Book> {
     private final AuthorRepository authorRepository;
 
+    @Override
     public Author getAuthor(Book book) {
-        return authorRepository.findById(book.getAuthorDetails().getAuthorId()).orElseThrow(()-> new RuntimeException("Author needed"));
+        return authorRepository.findById(book.getAuthorDetails().getAuthorId())
+                .orElseThrow(()-> new RuntimeException("Author needed"));
     }
 }
