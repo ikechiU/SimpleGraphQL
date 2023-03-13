@@ -1,0 +1,20 @@
+type Author {
+    authorId: ID!
+    firstName: String!
+    lastName: String!
+    age: Int
+}
+
+#Root
+type Query {
+    findAllAuthors: [Author]!
+    findAllAuthorsPaged(page: Int, limit: Int): [Author]!
+    countAuthors: Int!
+    findAuthorById(authorId: ID): Author
+}
+
+#Root
+type Mutation {
+    createAuthor(firstName: String!, lastName: String!, age: Int!): Author
+}
+
