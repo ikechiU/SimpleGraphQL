@@ -3,6 +3,9 @@ jobs:
   build:
     docker:
       - image: cimg/openjdk:19.0.2 #we create a docker image using circle's openjdk
+        auth:
+          username: $DOCKER_USER
+          password: $DOCKER_PASS
 
     working_directory: ~/SImpleGraphQL
 
@@ -14,9 +17,9 @@ jobs:
       # the following commented lines are not allowed in the free version of circleci
       #       - setup_remote_docker:
       #           docker_layer_caching: true
-      - run:
-          name: Login to DockerHub
-          command: echo $DOCKER_PASS | docker login --username=$DOCKER_USER --password=$DOCKER_PASS
+#      - run:
+#          name: Login to DockerHub
+#          command: docker login --username=$DOCKER_USER --password=$DOCKER_PASS
 #          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run:
           name: Decrpyt Secrets
