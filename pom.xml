@@ -82,6 +82,7 @@
 					<container>
 						<ports>
 							<port>8080</port>
+							<port>5432</port>
 							<port>15370</port>
 						</ports>
 					</container>
