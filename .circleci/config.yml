@@ -22,8 +22,11 @@ jobs:
 #          command: docker login --username=$DOCKER_USER --password=$DOCKER_PASS
 #          command: docker login -u $DOCKER_USER -p $DOCKER_PASS
       - run:
+          name: "What was my OPEN_SSL_PASSWORD environment variable?"
+          command: echo ${OPEN_SSL_PASSWORD}
+      - run:
           name: Decrpyt Secrets
-          command: openssl enc -d -aes-256-ecb -md md5 -in src/main/resources/application-prod.properties.secrets -out src/main/resources/application-prod.properties -k $OPEN_SSL_PASSWORD
+          command: openssl enc -d -aes-256-ecb -md md5 -in src/main/resources/application-prod.properties.secrets -out src/main/resources/application-prod.properties -k ${OPEN_SSL_PASSWORD}
 
       # Download and cache dependencies
       - restore_cache:
