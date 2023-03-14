@@ -33,4 +33,5 @@ build/
 .vscode/
 
 ### application-prod.properties
-/Users/decagon/IdeaProjects/SImpleGraphQL/src/main/resources/application-prod.properties
+src/main/resources/application-prod.properties
+src/main/resources/application-prod.properties.secrets
